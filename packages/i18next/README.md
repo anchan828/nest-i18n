@@ -74,6 +74,9 @@ export class RootUserQueryResolver {
 
 ## Note
 
+There are wrapped exception classes for i18n. See [./src/exceptions.t](./src/exceptions.ts)
+
+
 This package is using `i18next-node-fs-backend` for loading translations from static files.
 
 ```ts
