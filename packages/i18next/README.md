@@ -40,6 +40,8 @@ export class AppModule {}
 
 ### Using with controller
 
+Use **I18nExceptionFilter**
+
 ```ts
 import { I18nExceptionFilter, I18nNotFoundException } from "@anchan828/nest-i18n-i18next";
 
@@ -48,6 +50,23 @@ import { I18nExceptionFilter, I18nNotFoundException } from "@anchan828/nest-i18n
 class TestController {
   @Get("error")
   public i18nError(): Promise<string> {
+    throw new I18nNotFoundException({ key: "test" });
+  }
+}
+```
+
+### Using with GraphQL
+
+Use **I18nGqlExceptionFilter**
+
+```ts
+import { I18nGqlExceptionFilter, I18nNotFoundException } from "@anchan828/nest-i18n-i18next";
+
+@Resolver("User")
+@UseFilters(I18nGqlExceptionFilter)
+export class RootUserQueryResolver {
+  @Query()
+  public async user(@Args("id") id: string): Promise<Nullable<UserEntity>> {
     throw new I18nNotFoundException({ key: "test" });
   }
 }

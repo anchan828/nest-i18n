@@ -1,6 +1,7 @@
 import { ArgumentsHost, HttpException } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
 import { I18nMessage } from "./interfaces";
+
 /**
  *
  *
@@ -11,7 +12,12 @@ import { I18nMessage } from "./interfaces";
  * @template T
  */
 export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
-  public catch(exception: HttpException, host: ArgumentsHost): HttpException | void {
+  public catch(exception: HttpException, host: ArgumentsHost): void {
+    exception = this.translateException(exception, host);
+    super.catch(exception, host);
+  }
+
+  protected translateException(exception: HttpException, host: ArgumentsHost): HttpException {
     if (exception.message && exception.message.key) {
       const message = this.getTranslation(exception.message, host);
       const status = Reflect.get(exception, "status");
@@ -19,11 +25,7 @@ export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
       Reflect.set(exception, "response", { statusCode: status, message: message });
     }
 
-    if (this.applicationRef || this.httpAdapterHost) {
-      super.catch(exception, host);
-    } else {
-      return exception;
-    }
+    return exception;
   }
 
   private getAcceptLanguageHeader(host: ArgumentsHost): string | undefined {
@@ -57,4 +59,11 @@ export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
   }
 
   public abstract getTranslation(message: I18nMessage<T>, host: ArgumentsHost): string;
+}
+
+export abstract class BaseI18nGqlExceptionFilter<T> extends BaseI18nExceptionFilter<T> {
+  public catch(exception: HttpException, host: ArgumentsHost): HttpException {
+    exception = this.translateException(exception, host);
+    return exception;
+  }
 }
