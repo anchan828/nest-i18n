@@ -1,6 +1,6 @@
 import { ArgumentsHost } from "@nestjs/common";
 
-export interface I18nMessage<T> extends Object {
+export interface I18nMessage<T> {
   key: string;
   options?: T;
 }
