@@ -67,17 +67,13 @@ export abstract class BaseI18nGqlExceptionFilter<T> extends BaseI18nExceptionFil
     return exception;
   }
 
-  protected getAcceptLanguageHeader(host: ArgumentsHost & { getRequest: () => any }): string | undefined {
-    if (!host.getRequest) {
-      return;
+  protected getAcceptLanguageHeader(host: ArgumentsHost): string | undefined {
+    const context = host.getArgByIndex(2);
+
+    for (const key of Object.keys(context)) {
+      if (context[key] && context[key].headers) {
+        return context[key].headers["accept-language"];
+      }
     }
-
-    const req = host.getRequest();
-
-    if (!req) {
-      return;
-    }
-
-    return req.headers["accept-language"];
   }
 }

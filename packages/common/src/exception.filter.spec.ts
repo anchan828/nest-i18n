@@ -101,18 +101,18 @@ describe("BaseI18nGqlExceptionFilter", () => {
     it("should return undefined", () => {
       expect(
         filter["getAcceptLanguageHeader"]({
-          switchToHttp: () => ({
-            getRequest: () => undefined,
-          }),
+          getArgByIndex: () => ({}),
         } as any),
       ).toBeUndefined();
     });
     it("should get accept-language header", () => {
       expect(
         filter["getAcceptLanguageHeader"]({
-          getRequest: () => ({
-            headers: {
-              "accept-language": "ja, en",
+          getArgByIndex: () => ({
+            req: {
+              headers: {
+                "accept-language": "ja, en",
+              },
             },
           }),
         } as any),
