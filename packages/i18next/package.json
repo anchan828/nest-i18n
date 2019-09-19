@@ -1,0 +1,34 @@
+{
+  "name": "@anchan828/nest-i18n-i18next",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepublishOnly": "rm -rf dist && npm run build && rm -f dist/*.tsbuildinfo && npm run copy:license",
+    "copy:license": "cp ../../LICENSE ./",
+    "build": "node ../../node_modules/typescript/bin/tsc -p tsconfig.build.json",
+    "lint": "node ../../node_modules/eslint/bin/eslint --ignore-path ../../.eslintignore '**/*.ts'",
+    "lint:fix": "npm run lint -- --fix",
+    "watch": "node ../../node_modules/typescript/bin/tsc --watch",
+    "test": "node ../../node_modules/jest/bin/jest --coverage --runInBand --detectOpenHandles --forceExit",
+    "test:debug": "node --inspect-brk ../../node_modules/jest/bin/jest --runInBand --logHeapUsage",
+    "test:watch": "npm run test -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anchan828/nest-i18n.git"
+  },
+  "author": "anchan828 <anchan828@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anchan828/nest-i18n/issues"
+  },
+  "homepage": "https://github.com/anchan828/nest-i18n#readme",
+  "dependencies": {
+    "@anchan828/nest-i18n-common": "0.0.0"
+  },
+  "devDependencies": {
+    "i18next": "17.0.16"
+  }
+}
