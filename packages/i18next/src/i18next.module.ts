@@ -1,5 +1,6 @@
 import { DynamicModule, Global, Inject, Module, OnModuleInit, Provider } from "@nestjs/common";
-import { init, InitOptions } from "i18next";
+import { InitOptions, use } from "i18next";
+import * as Backend from "i18next-node-fs-backend";
 import { I18NEXT_INIT_OPTIONS } from "./constants";
 import { InitAsyncOptions, InitOptionsFactory } from "./interfaces";
 
@@ -9,7 +10,7 @@ export class I18nextModule implements OnModuleInit {
   constructor(@Inject(I18NEXT_INIT_OPTIONS) private readonly options: InitOptions) {}
 
   async onModuleInit(): Promise<void> {
-    await init(this.options);
+    await use(Backend).init(this.options);
   }
 
   public static register(options: InitOptions): DynamicModule {
@@ -68,7 +69,8 @@ export class I18nextModule implements OnModuleInit {
 
     return {
       provide: I18NEXT_INIT_OPTIONS,
-      useFactory: async (optionsFactory: InitOptionsFactory) => optionsFactory.createCacheOptions(),
+      useFactory: (optionsFactory: InitOptionsFactory): InitOptions | Promise<InitOptions> =>
+        optionsFactory.createCacheOptions(),
       inject,
     };
   }
