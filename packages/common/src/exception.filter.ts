@@ -28,7 +28,7 @@ export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
     return exception;
   }
 
-  private getAcceptLanguageHeader(host: ArgumentsHost): string | undefined {
+  protected getAcceptLanguageHeader(host: ArgumentsHost): string | undefined {
     const req = host.switchToHttp().getRequest();
 
     if (!req) {
@@ -65,5 +65,19 @@ export abstract class BaseI18nGqlExceptionFilter<T> extends BaseI18nExceptionFil
   public catch(exception: HttpException, host: ArgumentsHost): HttpException {
     exception = this.translateException(exception, host);
     return exception;
+  }
+
+  protected getAcceptLanguageHeader(host: ArgumentsHost & { getRequest: () => any }): string | undefined {
+    if (!host.getRequest) {
+      return;
+    }
+
+    const req = host.getRequest();
+
+    if (!req) {
+      return;
+    }
+
+    return req.headers["accept-language"];
   }
 }

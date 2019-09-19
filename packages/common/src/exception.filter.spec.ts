@@ -110,12 +110,10 @@ describe("BaseI18nGqlExceptionFilter", () => {
     it("should get accept-language header", () => {
       expect(
         filter["getAcceptLanguageHeader"]({
-          switchToHttp: () => ({
-            getRequest: () => ({
-              headers: {
-                "accept-language": "ja, en",
-              },
-            }),
+          getRequest: () => ({
+            headers: {
+              "accept-language": "ja, en",
+            },
           }),
         } as any),
       ).toBe("ja, en");
