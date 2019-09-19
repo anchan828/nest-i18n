@@ -53,6 +53,19 @@ class TestController {
 }
 ```
 
+## Note
+
+This package is using `i18next-node-fs-backend` for loading translations from static files.
+
+```ts
+I18nextModule.register({
+  fallbackLng: ["en"],
+  backend: {
+    loadPath: "/locales/{{lng}}/{{ns}}.json",
+  },
+});
+```
+
 ## License
 
 [MIT](LICENSE)
