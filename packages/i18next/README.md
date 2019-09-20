@@ -72,6 +72,13 @@ export class RootUserQueryResolver {
 }
 ```
 
+### Set Accept-Language header
+
+You need to set Accept-Language header for detecting language.
+
+![](https://i.gyazo.com/460408102a11c604452dbb4dc89710ae.png)
+
+
 ## Note
 
 There are wrapped exception classes for i18n. See [./src/exceptions.t](./src/exceptions.ts)
