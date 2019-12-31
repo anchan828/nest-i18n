@@ -1,6 +1,6 @@
 import { Controller, Get, INestApplication, UseFilters } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import * as request from "supertest";
+import request from "supertest";
 import { I18nExceptionFilter } from "./exception.filter";
 import { I18nNotFoundException } from "./exceptions";
 import { I18nextModule } from "./i18next.module";
