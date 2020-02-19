@@ -35,7 +35,7 @@
     "@nestjs/platform-express": "6.11.7",
     "@nestjs/testing": "6.11.7",
     "@types/jest": "25.1.2",
-    "@types/node": "11.15.6",
+    "@types/node": "11.15.7",
     "@types/prettier": "1.19.0",
     "@types/supertest": "2.0.8",
     "@typescript-eslint/eslint-plugin": "2.20.0",
