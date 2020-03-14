@@ -18,11 +18,12 @@ export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
   }
 
   protected translateException(exception: HttpException, host: ArgumentsHost): HttpException {
-    if (exception.message && exception.message.key) {
-      const message = this.getTranslation(exception.message, host);
+    const response = exception.getResponse() as I18nMessage<T>;
+    if (typeof response === "object" && response.key) {
+      const message = this.getTranslation(response, host);
       const status = Reflect.get(exception, "status");
-      Reflect.set(exception, "message", message);
-      Reflect.set(exception, "response", { statusCode: status, message: message });
+      Reflect.set(exception, "error", message);
+      Reflect.set(exception, "response", { statusCode: status, error: message, message: exception.message });
     }
 
     return exception;

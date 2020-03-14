@@ -1,4 +1,12 @@
-import { Catch, Controller, Get, HttpException, INestApplication, UseFilters } from "@nestjs/common";
+import {
+  BadRequestException,
+  Catch,
+  Controller,
+  Get,
+  HttpException,
+  INestApplication,
+  UseFilters,
+} from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import * as request from "supertest";
 import { BaseI18nExceptionFilter, BaseI18nGqlExceptionFilter } from "./exception.filter";
@@ -26,7 +34,7 @@ describe("BaseI18nExceptionFilter", () => {
 
     @Get("i18n-error")
     public i18nError(): Promise<string> {
-      throw new HttpException({ key: "test" }, 400);
+      throw new BadRequestException({ key: "test" });
     }
   }
 
@@ -49,7 +57,8 @@ describe("BaseI18nExceptionFilter", () => {
       .then(res => {
         expect(res.body).toEqual({
           statusCode: 400,
-          message: "translated test",
+          error: "translated test",
+          message: "Bad Request Exception",
         });
       });
   });
@@ -87,9 +96,10 @@ describe("BaseI18nGqlExceptionFilter", () => {
     });
 
     it("should return exception", () => {
-      expect(filter.catch({ message: { key: "test" } } as any, {} as any)).toEqual({
-        message: "test",
-        response: { message: "test" },
+      expect(filter.catch({ getResponse: () => ({ key: "test" }) } as any, {} as any)).toEqual({
+        getResponse: expect.any(Function),
+        error: "test",
+        response: { error: "test" },
       });
     });
   });
@@ -125,11 +135,11 @@ describe("BaseI18nGqlExceptionFilter", () => {
       expect(filter.getCurrentLanguages).toBeDefined();
     });
     it("should get empty array", () => {
-      filter["getAcceptLanguageHeader"] = () => undefined;
+      filter["getAcceptLanguageHeader"] = (): undefined => undefined;
       expect(filter.getCurrentLanguages({} as any)).toEqual([]);
     });
     it("should get languages", () => {
-      filter["getAcceptLanguageHeader"] = () => "ja, en";
+      filter["getAcceptLanguageHeader"] = (): string => "ja, en";
       expect(filter.getCurrentLanguages({} as any)).toEqual(["ja", "en"]);
     });
   });
