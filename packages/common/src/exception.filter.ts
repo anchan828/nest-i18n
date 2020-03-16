@@ -1,4 +1,4 @@
-import { ArgumentsHost, HttpException } from "@nestjs/common";
+import { ArgumentsHost, ContextType, HttpException } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
 import { I18nMessage } from "./interfaces";
 
@@ -20,13 +20,12 @@ export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
   protected translateException(exception: HttpException, host: ArgumentsHost): HttpException {
     const response = exception.getResponse() as I18nMessage<T>;
     if (typeof response === "object" && response.key) {
-      const error = this.getTranslation(response, host);
+      const message = this.getTranslation(response, host);
       const status = Reflect.get(exception, "status");
-      Reflect.set(exception, "error", error);
       Reflect.set(exception, "response", {
         statusCode: status,
-        error,
-        message: exception.message?.replace(/^18 /g, ""),
+        error: exception.message.replace(/^18 /g, ""),
+        message,
       });
     }
 
@@ -34,9 +33,10 @@ export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
   }
 
   protected getAcceptLanguageHeader(host: ArgumentsHost): string | undefined {
-    const req = host.switchToHttp().getRequest();
+    const type = host.getType() as "graphql" | ContextType;
+    const req = type === "graphql" ? host.getArgByIndex(2).req : host.switchToHttp().getRequest();
 
-    if (!req) {
+    if (!(req && req.headers)) {
       return;
     }
 
@@ -64,21 +64,4 @@ export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
   }
 
   public abstract getTranslation(message: I18nMessage<T>, host: ArgumentsHost): string;
-}
-
-export abstract class BaseI18nGqlExceptionFilter<T> extends BaseI18nExceptionFilter<T> {
-  public catch(exception: HttpException, host: ArgumentsHost): HttpException {
-    exception = this.translateException(exception, host);
-    return exception;
-  }
-
-  protected getAcceptLanguageHeader(host: ArgumentsHost): string | undefined {
-    const context = host.getArgByIndex(2);
-
-    for (const key of Object.keys(context)) {
-      if (context[key] && context[key].headers) {
-        return context[key].headers["accept-language"];
-      }
-    }
-  }
 }
