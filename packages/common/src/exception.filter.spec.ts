@@ -1,4 +1,5 @@
 import {
+  ArgumentsHost,
   BadRequestException,
   Catch,
   Controller,
@@ -9,76 +10,100 @@ import {
 } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import * as request from "supertest";
-import { BaseI18nExceptionFilter } from "./exception.filter";
+import { BaseI18nExceptionFilter, BaseI18nGqlExceptionFilter } from "./exception.filter";
 import { I18nMessage } from "./interfaces";
 
 describe("BaseI18nExceptionFilter", () => {
+  it("should be defined", () => {
+    expect(BaseI18nGqlExceptionFilter).toBeDefined();
+  });
+
   @Catch(HttpException)
   class TestI18nExceptionFilter extends BaseI18nExceptionFilter<any> {
-    public getTranslation(message: I18nMessage<any>): string {
+    public getTranslation(message: I18nMessage<any>, host: ArgumentsHost): string {
+      const language = this.getCurrentLanguages(host);
+      expect(language).toBeDefined();
       return `translated ${message.key}`;
     }
   }
 
-  let filter: TestI18nExceptionFilter;
-
-  beforeEach(async () => {
-    filter = new TestI18nExceptionFilter();
-  });
-
-  it("should be defined", () => {
-    expect(BaseI18nExceptionFilter).toBeDefined();
-  });
-
-  describe("e2e tests", () => {
-    @Controller()
-    @UseFilters(TestI18nExceptionFilter)
-    class TestController {
-      @Get("error")
-      public error(): Promise<string> {
-        throw new HttpException("error message", 400);
-      }
-
-      @Get("i18n-error")
-      public i18nError(): Promise<string> {
-        throw new BadRequestException({ key: "test" });
-      }
+  @Controller()
+  @UseFilters(TestI18nExceptionFilter)
+  class TestController {
+    @Get("error")
+    public error(): Promise<string> {
+      throw new HttpException("error message", 400);
     }
-    let app: INestApplication;
-    beforeEach(async () => {
-      const module = await Test.createTestingModule({
-        controllers: [TestController],
-      }).compile();
-      app = module.createNestApplication();
-      expect(app).toBeDefined();
-      await app.init();
-      filter = new TestI18nExceptionFilter();
-    });
-    afterEach(async () => {
-      await app.close();
+
+    @Get("i18n-error")
+    public i18nError(): Promise<string> {
+      throw new BadRequestException({ key: "test" });
+    }
+  }
+
+  let app: INestApplication;
+  beforeEach(async () => {
+    const module = await Test.createTestingModule({
+      controllers: [TestController],
+    }).compile();
+    app = module.createNestApplication();
+    expect(app).toBeDefined();
+    await app.init();
+  });
+  afterEach(async () => {
+    await app.close();
+  });
+
+  it("should get text", async () => {
+    await request(app.getHttpServer())
+      .get("/i18n-error")
+      .then(res => {
+        expect(res.body).toEqual({
+          statusCode: 400,
+          message: "translated test",
+          error: "Bad Request Exception",
+        });
+      });
+  });
+
+  it("should get text", async () => {
+    await request(app.getHttpServer())
+      .get("/error")
+      .then(res => {
+        expect(res.body).toEqual({
+          statusCode: 400,
+          message: "error message",
+        });
+      });
+  });
+});
+
+describe("BaseI18nGqlExceptionFilter", () => {
+  it("should be defined", () => {
+    expect(BaseI18nGqlExceptionFilter).toBeDefined();
+  });
+
+  class TestI18nGqlExceptionFilter extends BaseI18nGqlExceptionFilter<any> {
+    public getTranslation(message: I18nMessage<any>): string {
+      return message.key;
+    }
+  }
+  let filter: TestI18nGqlExceptionFilter;
+  beforeEach(() => {
+    filter = new TestI18nGqlExceptionFilter();
+  });
+
+  describe("catch", () => {
+    it("should be defined", () => {
+      expect(filter.catch).toBeDefined();
     });
 
-    it("should get text", async () => {
-      await request(app.getHttpServer())
-        .get("/i18n-error")
-        .then(res => {
-          expect(res.body).toEqual({
-            statusCode: 400,
-            message: "translated test",
-            error: "Bad Request Exception",
-          });
-        });
-    });
-
-    it("should get text", async () => {
-      await request(app.getHttpServer())
-        .get("/error")
-        .then(res => {
-          expect(res.body).toEqual({
-            statusCode: 400,
-            message: "error message",
-          });
-        });
+    it("should return exception", () => {
+      expect(filter.catch({ getResponse: () => ({ key: "test" }), message: "error" } as any, {} as any)).toEqual({
+        getResponse: expect.any(Function),
+        message: "error",
+        response: { message: "test", error: "error" },
+      });
     });
   });
 
@@ -89,30 +114,11 @@ describe("BaseI18nExceptionFilter", () => {
     it("should return undefined", () => {
       expect(
         filter["getAcceptLanguageHeader"]({
-          switchToHttp: () => ({
-            getRequest: (): any => ({}),
-          }),
-          getType: () => "http",
+          getArgByIndex: () => ({}),
         } as any),
       ).toBeUndefined();
     });
-
-    it("should get accept-language header (http)", () => {
-      expect(
-        filter["getAcceptLanguageHeader"]({
-          switchToHttp: () => ({
-            getRequest: (): any => ({
-              headers: {
-                "accept-language": "ja, en",
-              },
-            }),
-          }),
-          getType: () => "http",
-        } as any),
-      ).toBe("ja, en");
-    });
-
-    it("should get accept-language header (graphql)", () => {
+    it("should get accept-language header", () => {
       expect(
         filter["getAcceptLanguageHeader"]({
           getArgByIndex: () => ({
@@ -122,7 +128,6 @@ describe("BaseI18nExceptionFilter", () => {
               },
             },
           }),
-          getType: () => "graphql",
         } as any),
       ).toBe("ja, en");
     });
@@ -147,7 +152,7 @@ describe("BaseI18nExceptionFilter", () => {
       expect(filter.getTranslation).toBeDefined();
     });
     it("should return key", () => {
-      expect(filter.getTranslation({ key: "key" })).toBe("translated key");
+      expect(filter.getTranslation({ key: "key" })).toBe("key");
     });
   });
 });

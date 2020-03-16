@@ -1,4 +1,4 @@
-import { ArgumentsHost, ContextType, HttpException } from "@nestjs/common";
+import { ArgumentsHost, HttpException } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
 import { I18nMessage } from "./interfaces";
 
@@ -14,12 +14,7 @@ import { I18nMessage } from "./interfaces";
 export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
   public catch(exception: HttpException, host: ArgumentsHost): void | HttpException {
     exception = this.translateException(exception, host);
-    const type = host.getType() as "graphql" | ContextType;
-    if (type === "graphql") {
-      return exception;
-    } else {
-      super.catch(exception, host);
-    }
+    super.catch(exception, host);
   }
 
   protected translateException(exception: HttpException, host: ArgumentsHost): HttpException {
@@ -38,8 +33,7 @@ export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
   }
 
   protected getAcceptLanguageHeader(host: ArgumentsHost): string | undefined {
-    const type = host.getType() as "graphql" | ContextType;
-    const req = type === "graphql" ? host.getArgByIndex(2).req : host.switchToHttp().getRequest();
+    const req = host.switchToHttp().getRequest();
 
     if (!(req && req.headers)) {
       return;
@@ -69,4 +63,21 @@ export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
   }
 
   public abstract getTranslation(message: I18nMessage<T>, host: ArgumentsHost): string;
+}
+
+export abstract class BaseI18nGqlExceptionFilter<T> extends BaseI18nExceptionFilter<T> {
+  public catch(exception: HttpException, host: ArgumentsHost): HttpException {
+    exception = this.translateException(exception, host);
+    return exception;
+  }
+
+  protected getAcceptLanguageHeader(host: ArgumentsHost): string | undefined {
+    const context = host.getArgByIndex(2);
+
+    for (const key of Object.keys(context)) {
+      if (context[key] && context[key].headers) {
+        return context[key].headers["accept-language"];
+      }
+    }
+  }
 }
