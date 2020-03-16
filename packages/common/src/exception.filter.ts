@@ -12,10 +12,12 @@ import { I18nMessage } from "./interfaces";
  * @template T
  */
 export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
-  public catch(exception: HttpException, host: ArgumentsHost): void {
+  public catch(exception: HttpException, host: ArgumentsHost): void | HttpException {
     exception = this.translateException(exception, host);
     const type = host.getType() as "graphql" | ContextType;
-    if (type !== "graphql") {
+    if (type === "graphql") {
+      return exception;
+    } else {
       super.catch(exception, host);
     }
   }
