@@ -14,7 +14,10 @@ import { I18nMessage } from "./interfaces";
 export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
   public catch(exception: HttpException, host: ArgumentsHost): void {
     exception = this.translateException(exception, host);
-    super.catch(exception, host);
+    const type = host.getType() as "graphql" | ContextType;
+    if (type !== "graphql") {
+      super.catch(exception, host);
+    }
   }
 
   protected translateException(exception: HttpException, host: ArgumentsHost): HttpException {
