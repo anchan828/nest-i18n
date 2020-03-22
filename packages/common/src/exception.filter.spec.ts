@@ -57,7 +57,7 @@ describe("BaseI18nExceptionFilter", () => {
   it("should get text", async () => {
     await request(app.getHttpServer())
       .get("/i18n-error")
-      .then(res => {
+      .then((res) => {
         expect(res.body).toEqual({
           statusCode: 400,
           message: "translated test",
@@ -69,7 +69,7 @@ describe("BaseI18nExceptionFilter", () => {
   it("should get text", async () => {
     await request(app.getHttpServer())
       .get("/error")
-      .then(res => {
+      .then((res) => {
         expect(res.body).toEqual({
           statusCode: 400,
           message: "error message",

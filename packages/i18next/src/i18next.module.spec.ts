@@ -32,7 +32,7 @@ describe.each([
       };
     },
   }),
-])("I18nextModule", i18nModule => {
+])("I18nextModule", (i18nModule) => {
   @Controller()
   @UseFilters(I18nExceptionFilter)
   class TestController {
@@ -59,7 +59,7 @@ describe.each([
   it("should get fallback text", async () => {
     await request(app.getHttpServer())
       .get("/error")
-      .then(res => {
+      .then((res) => {
         expect(res.body).toEqual({
           statusCode: 404,
           error: "Not Found Exception",
@@ -72,7 +72,7 @@ describe.each([
     await request(app.getHttpServer())
       .get("/error")
       .set("Accept-Language", "ja")
-      .then(res => {
+      .then((res) => {
         expect(res.body).toEqual({
           statusCode: 404,
           error: "Not Found Exception",
@@ -83,7 +83,7 @@ describe.each([
     await request(app.getHttpServer())
       .get("/error")
       .set("Accept-Language", "ja;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5")
-      .then(res => {
+      .then((res) => {
         expect(res.body).toEqual({
           statusCode: 404,
           message: "テスト",
@@ -96,7 +96,7 @@ describe.each([
     await request(app.getHttpServer())
       .get("/error")
       .set("Accept-Language", "fr")
-      .then(res => {
+      .then((res) => {
         expect(res.body).toEqual({
           statusCode: 404,
           message: "Test",

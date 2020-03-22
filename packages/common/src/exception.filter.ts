@@ -58,8 +58,8 @@ export abstract class BaseI18nExceptionFilter<T> extends BaseExceptionFilter {
 
     return language
       .split(",")
-      .filter(l => l)
-      .map(l => l.trim().split(";")[0]);
+      .filter((l) => l)
+      .map((l) => l.trim().split(";")[0]);
   }
 
   public abstract getTranslation(message: I18nMessage<T>, host: ArgumentsHost): string;

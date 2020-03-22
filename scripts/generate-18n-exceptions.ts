@@ -3,7 +3,7 @@ import { writeFileSync } from "fs";
 import { resolve } from "path";
 import * as prettier from "prettier";
 
-const exceptionNames = Object.keys(exceptions).filter(key => key.endsWith("Exception"));
+const exceptionNames = Object.keys(exceptions).filter((key) => key.endsWith("Exception"));
 
 const texts: string[] = [`import { I18nMessage } from "@anchan828/nest-i18n-common";`];
 
