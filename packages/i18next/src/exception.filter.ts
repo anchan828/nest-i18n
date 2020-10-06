@@ -1,9 +1,60 @@
-import { BaseI18nExceptionFilter, BaseI18nGqlExceptionFilter, I18nMessage } from "@anchan828/nest-i18n-common";
+import { I18nMessage } from "@anchan828/nest-i18n-common";
 import { ArgumentsHost, Catch, HttpException } from "@nestjs/common";
+import { BaseExceptionFilter } from "@nestjs/core";
 import i18next, { StringMap, TOptions } from "i18next";
 
 @Catch(HttpException)
-export class I18nExceptionFilter extends BaseI18nExceptionFilter<TOptions<StringMap>> {
+export class I18nExceptionFilter extends BaseExceptionFilter {
+  public catch(exception: HttpException, host: ArgumentsHost): void | HttpException {
+    exception = this.translateException(exception, host);
+    super.catch(exception, host);
+  }
+
+  protected translateException(exception: HttpException, host: ArgumentsHost): HttpException {
+    const response = exception.getResponse() as I18nMessage<TOptions<StringMap>>;
+    if (typeof response === "object" && response.key) {
+      const message = this.getTranslation(response, host);
+      const status = Reflect.get(exception, "status");
+      Reflect.set(exception, "response", {
+        statusCode: status,
+        error: exception.message.replace(/^18 /g, ""),
+        message,
+      });
+    }
+
+    return exception;
+  }
+
+  protected getAcceptLanguageHeader(host: ArgumentsHost): string | undefined {
+    const req = this.getRequest(host);
+
+    if (!(req && req.headers)) {
+      return;
+    }
+
+    return req.headers["accept-language"];
+  }
+
+  /**
+   * Get languages from accept-language header
+   *
+   * @param {ArgumentsHost} host
+   * @returns {(string | undefined)}
+   * @memberof BaseI18nExceptionFilter
+   */
+  public getCurrentLanguages(host: ArgumentsHost): string[] {
+    const language = this.getAcceptLanguageHeader(host);
+
+    if (!language) {
+      return [];
+    }
+
+    return language
+      .split(",")
+      .filter((l) => l)
+      .map((l) => l.trim().split(";")[0]);
+  }
+
   public getTranslation(message: I18nMessage<TOptions<StringMap>>, host: ArgumentsHost): string {
     const languages = this.getCurrentLanguages(host);
 
@@ -13,17 +64,14 @@ export class I18nExceptionFilter extends BaseI18nExceptionFilter<TOptions<String
 
     return i18next.t(message.key, message.options);
   }
-}
 
-@Catch(HttpException)
-export class I18nGqlExceptionFilter extends BaseI18nGqlExceptionFilter<TOptions<StringMap>> {
-  public getTranslation(message: I18nMessage<TOptions<StringMap>>, host: ArgumentsHost): string {
-    const languages = this.getCurrentLanguages(host);
-
-    if (Array.isArray(languages)) {
-      message.options = Object.assign({ lng: languages[0] }, message.options);
+  private getRequest(host: ArgumentsHost): any {
+    if (host.getType() === "http") {
+      return host.getArgByIndex(0);
     }
 
-    return i18next.t(message.key, message.options);
+    if ((host.getType() as string) === "graphql") {
+      return host.getArgByIndex(2).req;
+    }
   }
 }
