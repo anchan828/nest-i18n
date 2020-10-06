@@ -23,7 +23,6 @@ export class I18nExceptionFilter extends BaseExceptionFilter {
       const status = Reflect.get(exception, "status");
       Reflect.set(exception, "response", {
         statusCode: status,
-        error: exception.message.replace(/^18 /g, ""),
         message,
       });
       exception.message = message;
