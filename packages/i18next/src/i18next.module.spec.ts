@@ -76,6 +76,7 @@ describe.each([
       .then((res) => {
         expect(res.body).toEqual({
           statusCode: 404,
+          error: "Not Found Exception",
           message: "Test",
         });
       });
@@ -92,6 +93,7 @@ describe.each([
                 exception: {
                   message: "Test",
                   response: {
+                    error: "Not Found Exception",
                     message: "Test",
                     statusCode: 404,
                   },
@@ -113,6 +115,7 @@ describe.each([
       .then((res) => {
         expect(res.body).toEqual({
           statusCode: 404,
+          error: "Not Found Exception",
           message: "テスト",
         });
       });
@@ -130,6 +133,7 @@ describe.each([
                 exception: {
                   message: "テスト",
                   response: {
+                    error: "Not Found Exception",
                     message: "テスト",
                     statusCode: 404,
                   },
@@ -150,6 +154,7 @@ describe.each([
         expect(res.body).toEqual({
           statusCode: 404,
           message: "テスト",
+          error: "Not Found Exception",
         });
       });
 
@@ -166,6 +171,7 @@ describe.each([
                 exception: {
                   message: "テスト",
                   response: {
+                    error: "Not Found Exception",
                     message: "テスト",
                     statusCode: 404,
                   },
@@ -188,6 +194,7 @@ describe.each([
         expect(res.body).toEqual({
           statusCode: 404,
           message: "Test",
+          error: "Not Found Exception",
         });
       });
 
@@ -204,6 +211,7 @@ describe.each([
                 exception: {
                   message: "Test",
                   response: {
+                    error: "Not Found Exception",
                     message: "Test",
                     statusCode: 404,
                   },
