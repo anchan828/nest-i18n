@@ -1,5 +1,5 @@
 import { I18nMessage } from "@anchan828/nest-i18n-common";
-import { ArgumentsHost, Catch, HttpException } from "@nestjs/common";
+import { ArgumentsHost, Catch, ContextType, HttpException } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
 import i18next, { StringMap, TOptions } from "i18next";
 
@@ -7,7 +7,13 @@ import i18next, { StringMap, TOptions } from "i18next";
 export class I18nExceptionFilter extends BaseExceptionFilter {
   public catch(exception: HttpException, host: ArgumentsHost): void | HttpException {
     exception = this.translateException(exception, host);
-    super.catch(exception, host);
+    switch (this.getHostType(host)) {
+      case "graphql":
+        return exception;
+      case "http":
+      default:
+        super.catch(exception, host);
+    }
   }
 
   protected translateException(exception: HttpException, host: ArgumentsHost): HttpException {
@@ -20,8 +26,8 @@ export class I18nExceptionFilter extends BaseExceptionFilter {
         error: exception.message.replace(/^18 /g, ""),
         message,
       });
+      exception.message = message;
     }
-
     return exception;
   }
 
@@ -66,12 +72,22 @@ export class I18nExceptionFilter extends BaseExceptionFilter {
   }
 
   private getRequest(host: ArgumentsHost): any {
-    if (host.getType() === "http") {
-      return host.getArgByIndex(0);
+    switch (this.getHostType(host)) {
+      case "graphql":
+        const context = host.getArgByIndex(2);
+        for (const key of Object.keys(context)) {
+          if (context[key] && context[key].headers) {
+            return context[key];
+          }
+        }
+        break;
+      case "http":
+      default:
+        return host.getArgByIndex(0);
     }
+  }
 
-    if ((host.getType() as string) === "graphql") {
-      return host.getArgByIndex(2).req;
-    }
+  private getHostType(host: ArgumentsHost): ContextType | "graphql" {
+    return host.getType();
   }
 }

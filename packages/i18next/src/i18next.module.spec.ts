@@ -1,10 +1,10 @@
 import { Controller, Get, INestApplication, UseFilters } from "@nestjs/common";
+import { GraphQLModule, ResolveField, Resolver } from "@nestjs/graphql";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
 import { I18nExceptionFilter } from "./exception.filter";
 import { I18nNotFoundException } from "./exceptions";
 import { I18nextModule } from "./i18next.module";
-
 describe.each([
   I18nextModule.register({
     fallbackLng: ["en"],
@@ -35,9 +35,11 @@ describe.each([
 ])("I18nextModule", (i18nModule) => {
   @Controller()
   @UseFilters(I18nExceptionFilter)
+  @Resolver("Query")
   class TestController {
     @Get("error")
-    public i18nError(): Promise<string> {
+    @ResolveField("error")
+    public error(): Promise<string> {
       throw new I18nNotFoundException({ key: "test" });
     }
   }
@@ -45,7 +47,19 @@ describe.each([
   let app: INestApplication;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [i18nModule],
+      imports: [
+        i18nModule,
+        GraphQLModule.forRoot({
+          bodyParserConfig: { limit: "1000mb" },
+          context: ({ req }): { req: Request } => ({ req }),
+          cors: { credentials: true, origin: true },
+          fieldResolverEnhancers: ["guards", "interceptors", "filters"],
+          typeDefs: `type Query {
+            error: String
+          }`,
+        }),
+      ],
+      providers: [TestController],
       controllers: [TestController],
     }).compile();
     app = module.createNestApplication();
@@ -66,6 +80,32 @@ describe.each([
           message: "Test",
         });
       });
+
+    await request(app.getHttpServer())
+      .post("/graphql")
+      .send({ query: "{error}" })
+      .then((res) => {
+        expect(res.body).toMatchObject({
+          errors: [
+            {
+              extensions: {
+                code: "INTERNAL_SERVER_ERROR",
+                exception: {
+                  message: "Test",
+                  response: {
+                    error: "Not Found Exception",
+                    message: "Test",
+                    statusCode: 404,
+                  },
+                  status: 404,
+                },
+              },
+              message: "Test",
+              path: ["error"],
+            },
+          ],
+        });
+      });
   });
 
   it("should get japanese text", async () => {
@@ -81,6 +121,33 @@ describe.each([
       });
 
     await request(app.getHttpServer())
+      .post("/graphql")
+      .set("Accept-Language", "ja")
+      .send({ query: "{error}" })
+      .then((res) => {
+        expect(res.body).toMatchObject({
+          errors: [
+            {
+              extensions: {
+                code: "INTERNAL_SERVER_ERROR",
+                exception: {
+                  message: "テスト",
+                  response: {
+                    error: "Not Found Exception",
+                    message: "テスト",
+                    statusCode: 404,
+                  },
+                  status: 404,
+                },
+              },
+              message: "テスト",
+              path: ["error"],
+            },
+          ],
+        });
+      });
+
+    await request(app.getHttpServer())
       .get("/error")
       .set("Accept-Language", "ja;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5")
       .then((res) => {
@@ -88,6 +155,33 @@ describe.each([
           statusCode: 404,
           message: "テスト",
           error: "Not Found Exception",
+        });
+      });
+
+    await request(app.getHttpServer())
+      .post("/graphql")
+      .set("Accept-Language", "ja;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5")
+      .send({ query: "{error}" })
+      .then((res) => {
+        expect(res.body).toMatchObject({
+          errors: [
+            {
+              extensions: {
+                code: "INTERNAL_SERVER_ERROR",
+                exception: {
+                  message: "テスト",
+                  response: {
+                    error: "Not Found Exception",
+                    message: "テスト",
+                    statusCode: 404,
+                  },
+                  status: 404,
+                },
+              },
+              message: "テスト",
+              path: ["error"],
+            },
+          ],
         });
       });
   });
@@ -101,6 +195,33 @@ describe.each([
           statusCode: 404,
           message: "Test",
           error: "Not Found Exception",
+        });
+      });
+
+    await request(app.getHttpServer())
+      .post("/graphql")
+      .set("Accept-Language", "fr")
+      .send({ query: "{error}" })
+      .then((res) => {
+        expect(res.body).toMatchObject({
+          errors: [
+            {
+              extensions: {
+                code: "INTERNAL_SERVER_ERROR",
+                exception: {
+                  message: "Test",
+                  response: {
+                    error: "Not Found Exception",
+                    message: "Test",
+                    statusCode: 404,
+                  },
+                  status: 404,
+                },
+              },
+              message: "Test",
+              path: ["error"],
+            },
+          ],
         });
       });
   });
