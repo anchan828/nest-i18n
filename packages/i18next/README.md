@@ -78,13 +78,11 @@ You need to set Accept-Language header for detecting language.
 
 ![](https://i.gyazo.com/460408102a11c604452dbb4dc89710ae.png)
 
-
 ## Note
 
 There are wrapped exception classes for i18n. See [./src/exceptions.t](./src/exceptions.ts)
 
-
-This package is using `i18next-node-fs-backend` for loading translations from static files.
+This package is using `i18next-fs-backend` for loading translations from static files.
 
 ```ts
 I18nextModule.register({
