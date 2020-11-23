@@ -1,6 +1,6 @@
 import { DynamicModule, Global, Inject, Module, OnModuleInit, Provider } from "@nestjs/common";
 import i18next, { InitOptions } from "i18next";
-import Backend from "i18next-node-fs-backend";
+import Backend from "i18next-fs-backend";
 import { I18NEXT_INIT_OPTIONS } from "./constants";
 import { InitAsyncOptions, InitOptionsFactory } from "./interfaces";
 
