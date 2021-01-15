@@ -49,7 +49,7 @@
     "lint-staged": "10.5.3",
     "prettier": "2.2.1",
     "reflect-metadata": "0.1.13",
-    "supertest": "6.1.0",
+    "supertest": "6.1.1",
     "ts-jest": "26.4.4",
     "ts-node": "9.1.1",
     "typescript": "4.1.3"
