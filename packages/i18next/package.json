@@ -27,7 +27,7 @@
   "homepage": "https://github.com/anchan828/nest-i18n#readme",
   "dependencies": {
     "@anchan828/nest-i18n-common": "^0.2.19",
-    "i18next-fs-backend": "1.0.7"
+    "i18next-fs-backend": "1.0.8"
   },
   "devDependencies": {
     "@nestjs/graphql": "7.9.5",
