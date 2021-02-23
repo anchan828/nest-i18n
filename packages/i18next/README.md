@@ -7,8 +7,6 @@
 
 i18n module for [i18next](https://www.i18next.com)
 
-**Note: This package only supports HttpException filter**
-
 ## Installation
 
 ```sh
@@ -36,6 +34,18 @@ $ npm i --save @anchan828/nest-i18n-i18next i18next
   ],
 })
 export class AppModule {}
+```
+
+### Basic usage
+
+```ts
+@Controller()
+class TestController {
+  @Get("test")
+  public test(@Headers("accept-language") acceptLanguage: string): string {
+    return i18next.t("test", { lng: acceptLanguage });
+  }
+}
 ```
 
 ### Using with controller

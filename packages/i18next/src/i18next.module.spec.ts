@@ -1,6 +1,8 @@
-import { Controller, Get, INestApplication, UseFilters } from "@nestjs/common";
+import { Controller, createParamDecorator, Get, INestApplication, UseFilters } from "@nestjs/common";
+import { ExecutionContextHost } from "@nestjs/core/helpers/execution-context-host";
 import { GraphQLModule, ResolveField, Resolver } from "@nestjs/graphql";
 import { Test } from "@nestjs/testing";
+import i18next from "i18next";
 import request from "supertest";
 import { I18nExceptionFilter } from "./exception.filter";
 import { I18nNotFoundException } from "./exceptions";
@@ -33,6 +35,14 @@ describe.each([
     },
   }),
 ])("I18nextModule", (i18nModule) => {
+  const AcceptLanguage = createParamDecorator((_, args: ExecutionContextHost) => {
+    if (args.getType() === "http") {
+      return args.switchToHttp().getRequest().headers["accept-language"];
+    } else {
+      return args.getArgByIndex(2).req.headers["accept-language"];
+    }
+  });
+
   @Controller()
   @UseFilters(I18nExceptionFilter)
   @Resolver("Query")
@@ -41,6 +51,12 @@ describe.each([
     @ResolveField("error")
     public error(): Promise<string> {
       throw new I18nNotFoundException({ key: "test" });
+    }
+
+    @Get("test")
+    @ResolveField("test")
+    public test(@AcceptLanguage() acceptLanguage: string): string {
+      return i18next.t("test", { lng: acceptLanguage });
     }
   }
 
@@ -56,6 +72,7 @@ describe.each([
           fieldResolverEnhancers: ["guards", "interceptors", "filters"],
           typeDefs: `type Query {
             error: String
+            test: String
           }`,
         }),
       ],
@@ -71,6 +88,23 @@ describe.each([
   });
 
   it("should get fallback text", async () => {
+    await request(app.getHttpServer())
+      .get("/test")
+      .then((res) => {
+        expect(res.text).toEqual("Test");
+      });
+
+    await request(app.getHttpServer())
+      .post("/graphql")
+      .send({ query: "{test}" })
+      .then((res) => {
+        expect(res.body).toMatchObject({
+          data: {
+            test: "Test",
+          },
+        });
+      });
+
     await request(app.getHttpServer())
       .get("/error")
       .then((res) => {
@@ -109,6 +143,25 @@ describe.each([
   });
 
   it("should get japanese text", async () => {
+    await request(app.getHttpServer())
+      .get("/test")
+      .set("Accept-Language", "ja")
+      .then((res) => {
+        expect(res.text).toEqual("テスト");
+      });
+
+    await request(app.getHttpServer())
+      .post("/graphql")
+      .set("Accept-Language", "ja")
+      .send({ query: "{test}" })
+      .then((res) => {
+        expect(res.body).toMatchObject({
+          data: {
+            test: "テスト",
+          },
+        });
+      });
+
     await request(app.getHttpServer())
       .get("/error")
       .set("Accept-Language", "ja")
