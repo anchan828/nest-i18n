@@ -1,6 +1,6 @@
 {
   "name": "@anchan828/nest-i18n-common",
-  "version": "0.2.25",
+  "version": "0.2.26",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
