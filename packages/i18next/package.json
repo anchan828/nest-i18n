@@ -36,6 +36,6 @@
     "apollo-server-express": "2.21.1",
     "graphql": "15.5.0",
     "graphql-tools": "7.0.4",
-    "i18next": "19.9.1"
+    "i18next": "19.9.2"
   }
 }
