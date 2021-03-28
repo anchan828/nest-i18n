@@ -1,6 +1,6 @@
 {
   "name": "@anchan828/nest-i18n-i18next",
-  "version": "0.2.28",
+  "version": "0.2.29",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/anchan828/nest-i18n#readme",
   "dependencies": {
-    "@anchan828/nest-i18n-common": "^0.2.28",
+    "@anchan828/nest-i18n-common": "^0.2.29",
     "i18next-fs-backend": "1.1.0"
   },
   "devDependencies": {
