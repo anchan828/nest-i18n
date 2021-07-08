@@ -67,7 +67,7 @@ describe.each([
         i18nModule,
         GraphQLModule.forRoot({
           bodyParserConfig: { limit: "1000mb" },
-          context: ({ req }): { req: Request } => ({ req }),
+          context: ({ req }: { req: Request }): { req: Request } => ({ req }),
           cors: { credentials: true, origin: true },
           fieldResolverEnhancers: ["guards", "interceptors", "filters"],
           typeDefs: `type Query {
