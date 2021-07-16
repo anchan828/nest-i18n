@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "postinstall": "npm run bootstrap && npm run build",
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --hoist",
     "build": "lerna run build",
     "format": "prettier --write '**/*.{js,json,yml,yaml,md}'",
     "lint": "eslint --ignore-pattern packages '**/*.ts' && lerna run --parallel lint",
