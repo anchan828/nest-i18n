@@ -1,7 +1,8 @@
-import { Controller, createParamDecorator, Get, INestApplication, UseFilters } from "@nestjs/common";
+import { Controller, createParamDecorator, Get, HttpStatus, INestApplication, UseFilters } from "@nestjs/common";
 import { ExecutionContextHost } from "@nestjs/core/helpers/execution-context-host";
 import { GraphQLModule, ResolveField, Resolver } from "@nestjs/graphql";
 import { Test } from "@nestjs/testing";
+import { toApolloError } from "apollo-server-core";
 import i18next from "i18next";
 import request from "supertest";
 import { I18nExceptionFilter } from "./exception.filter";
@@ -67,9 +68,10 @@ describe.each([
         i18nModule,
         GraphQLModule.forRoot({
           bodyParserConfig: { limit: "1000mb" },
-          context: ({ req }): { req: Request } => ({ req }),
+          context: ({ req }: { req: Request }): { req: Request } => ({ req }),
           cors: { credentials: true, origin: true },
           fieldResolverEnhancers: ["guards", "interceptors", "filters"],
+          formatError: (error) => toApolloError(error, HttpStatus[error.extensions?.code]),
           typeDefs: `type Query {
             error: String
             test: String
@@ -123,19 +125,9 @@ describe.each([
           errors: [
             {
               extensions: {
-                code: "INTERNAL_SERVER_ERROR",
-                exception: {
-                  message: "Test",
-                  response: {
-                    error: "Not Found Exception",
-                    message: "Test",
-                    statusCode: 404,
-                  },
-                  status: 404,
-                },
+                code: "NOT_FOUND",
               },
               message: "Test",
-              path: ["error"],
             },
           ],
         });
@@ -182,19 +174,9 @@ describe.each([
           errors: [
             {
               extensions: {
-                code: "INTERNAL_SERVER_ERROR",
-                exception: {
-                  message: "テスト",
-                  response: {
-                    error: "Not Found Exception",
-                    message: "テスト",
-                    statusCode: 404,
-                  },
-                  status: 404,
-                },
+                code: "NOT_FOUND",
               },
               message: "テスト",
-              path: ["error"],
             },
           ],
         });
@@ -220,19 +202,9 @@ describe.each([
           errors: [
             {
               extensions: {
-                code: "INTERNAL_SERVER_ERROR",
-                exception: {
-                  message: "テスト",
-                  response: {
-                    error: "Not Found Exception",
-                    message: "テスト",
-                    statusCode: 404,
-                  },
-                  status: 404,
-                },
+                code: "NOT_FOUND",
               },
               message: "テスト",
-              path: ["error"],
             },
           ],
         });
@@ -260,19 +232,9 @@ describe.each([
           errors: [
             {
               extensions: {
-                code: "INTERNAL_SERVER_ERROR",
-                exception: {
-                  message: "Test",
-                  response: {
-                    error: "Not Found Exception",
-                    message: "Test",
-                    statusCode: 404,
-                  },
-                  status: 404,
-                },
+                code: "NOT_FOUND",
               },
               message: "Test",
-              path: ["error"],
             },
           ],
         });
