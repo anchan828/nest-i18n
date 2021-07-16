@@ -34,6 +34,7 @@
     "@nestjs/platform-express": "8.0.0",
     "@types/i18next-fs-backend": "1.0.1",
     "apollo-server-express": "2.25.2",
+    "apollo-server-core": "2.25.2",
     "graphql": "15.5.1",
     "graphql-tools": "7.0.5",
     "i18next": "20.3.2"
