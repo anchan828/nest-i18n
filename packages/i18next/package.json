@@ -1,6 +1,6 @@
 {
   "name": "@anchan828/nest-i18n-i18next",
-  "version": "0.2.44",
+  "version": "0.3.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,15 +26,15 @@
   },
   "homepage": "https://github.com/anchan828/nest-i18n#readme",
   "dependencies": {
-    "@anchan828/nest-i18n-common": "^0.2.44",
+    "@anchan828/nest-i18n-common": "^0.3.0",
     "i18next-fs-backend": "1.1.1"
   },
   "devDependencies": {
     "@nestjs/graphql": "8.0.2",
     "@nestjs/platform-express": "8.0.3",
     "@types/i18next-fs-backend": "1.0.1",
-    "apollo-server-express": "2.25.2",
     "apollo-server-core": "2.25.2",
+    "apollo-server-express": "2.25.2",
     "graphql": "15.5.1",
     "graphql-tools": "7.0.5",
     "i18next": "20.3.3"
