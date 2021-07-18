@@ -24,5 +24,12 @@
   "bugs": {
     "url": "https://github.com/anchan828/nest-i18n/issues"
   },
-  "homepage": "https://github.com/anchan828/nest-i18n#readme"
+  "homepage": "https://github.com/anchan828/nest-i18n#readme",
+  "peerDependencies": {
+    "@nestjs/common": "^8.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/common": "8.0.4",
+    "rxjs": "7.2.0"
+  }
 }
