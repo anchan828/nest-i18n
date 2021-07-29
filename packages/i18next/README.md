@@ -67,13 +67,13 @@ class TestController {
 
 ### Using with GraphQL
 
-Use **I18nGqlExceptionFilter**
+Use **I18nExceptionFilter**
 
 ```ts
-import { I18nGqlExceptionFilter, I18nNotFoundException } from "@anchan828/nest-i18n-i18next";
+import { I18nExceptionFilter, I18nNotFoundException } from "@anchan828/nest-i18n-i18next";
 
 @Resolver("User")
-@UseFilters(I18nGqlExceptionFilter)
+@UseFilters(I18nExceptionFilter)
 export class RootUserQueryResolver {
   @Query()
   public async user(@Args("id") id: string): Promise<Nullable<UserEntity>> {
