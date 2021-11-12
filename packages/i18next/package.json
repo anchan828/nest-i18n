@@ -27,7 +27,7 @@
   "homepage": "https://github.com/anchan828/nest-i18n#readme",
   "dependencies": {
     "@anchan828/nest-i18n-common": "^0.3.13",
-    "i18next-fs-backend": "1.1.1"
+    "i18next-fs-backend": "1.1.3"
   },
   "devDependencies": {
     "@nestjs/common": "8.2.0",
