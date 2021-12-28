@@ -39,7 +39,7 @@
     "graphql": "15.8.0",
     "graphql-tools": "8.2.0",
     "i18next": "21.6.3",
-    "rxjs": "7.5.0"
+    "rxjs": "7.5.1"
   },
   "peerDependencies": {
     "@nestjs/common": "^8.0.0"
