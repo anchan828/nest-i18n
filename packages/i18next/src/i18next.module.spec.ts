@@ -1,3 +1,4 @@
+import { ApolloDriver } from "@nestjs/apollo";
 import { Controller, createParamDecorator, Get, HttpStatus, INestApplication, UseFilters } from "@nestjs/common";
 import { ExecutionContextHost } from "@nestjs/core/helpers/execution-context-host";
 import { GraphQLModule, ResolveField, Resolver } from "@nestjs/graphql";
@@ -67,11 +68,12 @@ describe.each([
       imports: [
         i18nModule,
         GraphQLModule.forRoot({
+          driver: ApolloDriver,
           bodyParserConfig: { limit: "1000mb" },
           context: ({ req }: { req: Request }): { req: Request } => ({ req }),
           cors: { credentials: true, origin: true },
           fieldResolverEnhancers: ["guards", "interceptors", "filters"],
-          formatError: (error) => toApolloError(error, HttpStatus[error.extensions?.code]),
+          formatError: (error: any) => toApolloError(error, HttpStatus[error.extensions?.code]),
           typeDefs: `type Query {
             error: String
             test: String
