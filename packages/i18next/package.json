@@ -38,7 +38,7 @@
     "apollo-server-core": "3.6.7",
     "apollo-server-express": "3.6.7",
     "graphql": "16.3.0",
-    "graphql-tools": "8.2.5",
+    "graphql-tools": "8.2.6",
     "i18next": "21.6.16",
     "rxjs": "7.5.5"
   },
