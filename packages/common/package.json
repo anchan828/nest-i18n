@@ -2,34 +2,34 @@
   "name": "@anchan828/nest-i18n-common",
   "version": "0.3.35",
   "description": "",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "prepublishOnly": "rm -rf dist && npm run build && rm -f dist/*.tsbuildinfo && npm run copy:license",
-    "copy:license": "cp ../../LICENSE ./",
-    "build": "tsc -p tsconfig.build.json",
-    "lint": "eslint --ignore-path ../../.eslintignore '**/*.ts'",
-    "lint:fix": "npm run lint -- --fix",
-    "watch": "tsc --watch",
-    "test": "jest --coverage --runInBand --detectOpenHandles --forceExit",
-    "test:debug": "node --inspect-brk ../../node_modules/jest/bin/jest --runInBand --logHeapUsage",
-    "test:watch": "npm run test -- --watch"
+  "homepage": "https://github.com/anchan828/nest-i18n#readme",
+  "bugs": {
+    "url": "https://github.com/anchan828/nest-i18n/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anchan828/nest-i18n.git"
   },
-  "author": "anchan828 <anchan828@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/anchan828/nest-i18n/issues"
-  },
-  "homepage": "https://github.com/anchan828/nest-i18n#readme",
-  "peerDependencies": {
-    "@nestjs/common": "^8.0.0"
+  "author": "anchan828 <anchan828@gmail.com>",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "copy:license": "cp ../../LICENSE ./",
+    "lint": "eslint --ignore-path ../../.eslintignore '**/*.ts'",
+    "lint:fix": "npm run lint -- --fix",
+    "prepublishOnly": "rm -rf dist && npm run build && rm -f dist/*.tsbuildinfo && npm run copy:license",
+    "test": "jest --coverage --runInBand --detectOpenHandles --forceExit",
+    "test:debug": "node --inspect-brk ../../node_modules/jest/bin/jest --runInBand --logHeapUsage",
+    "test:watch": "npm run test -- --watch",
+    "watch": "tsc --watch"
   },
   "devDependencies": {
     "@nestjs/common": "8.4.4",
     "rxjs": "7.5.5"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^8.0.0"
   }
 }
