@@ -37,7 +37,7 @@
     "@types/i18next-fs-backend": "1.1.2",
     "apollo-server-core": "3.6.7",
     "apollo-server-express": "3.6.7",
-    "graphql": "16.3.0",
+    "graphql": "16.4.0",
     "graphql-tools": "8.2.8",
     "i18next": "21.6.16",
     "rxjs": "7.5.5"
