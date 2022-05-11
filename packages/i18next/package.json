@@ -39,7 +39,7 @@
     "apollo-server-express": "3.7.0",
     "graphql": "16.5.0",
     "graphql-tools": "8.2.9",
-    "i18next": "21.8.0",
+    "i18next": "21.8.1",
     "rxjs": "7.5.5"
   },
   "peerDependencies": {
