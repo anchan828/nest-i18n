@@ -1,7 +1,7 @@
-import { I18nMessage } from "@anchan828/nest-i18n-common";
+import { I18nMessage, StringMap } from "@anchan828/nest-i18n-common";
 import { ArgumentsHost, Catch, ContextType, HttpException } from "@nestjs/common";
 import { BaseExceptionFilter } from "@nestjs/core";
-import i18next, { StringMap, TOptions } from "i18next";
+import i18next, { TOptions } from "i18next";
 
 @Catch(HttpException)
 export class I18nExceptionFilter extends BaseExceptionFilter {
