@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@anchan828/nest-i18n-common": "^1.0.15",
-    "i18next-fs-backend": "^1.2.0"
+    "i18next-fs-backend": "^2.0.0"
   },
   "devDependencies": {
     "@nestjs/apollo": "^10.1.4",
