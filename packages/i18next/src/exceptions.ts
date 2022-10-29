@@ -1,4 +1,4 @@
-import { I18nMessage } from "@anchan828/nest-i18n-common";
+import { I18nMessage, StringMap } from "@anchan828/nest-i18n-common";
 import {
   BadGatewayException,
   BadRequestException,
@@ -20,7 +20,7 @@ import {
   UnprocessableEntityException,
   UnsupportedMediaTypeException,
 } from "@nestjs/common";
-import { StringMap, TOptions } from "i18next";
+import { TOptions } from "i18next";
 export class I18nBadRequestException extends BadRequestException {
   constructor(message: I18nMessage<TOptions<StringMap>>, error?: string) {
     super(message, error);
