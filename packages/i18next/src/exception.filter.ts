@@ -61,14 +61,14 @@ export class I18nExceptionFilter extends BaseExceptionFilter {
       .map((l) => l.trim().split(";")[0]);
   }
 
-  public getTranslation(message: I18nMessage<TOptions<StringMap>>, host: ArgumentsHost): string {
+  public getTranslation(message: I18nMessage<TOptions<any>>, host: ArgumentsHost): string {
     const languages = this.getCurrentLanguages(host);
 
     if (Array.isArray(languages)) {
       message.options = Object.assign({ lng: languages[0] }, message.options);
     }
 
-    return i18next.t(message.key, message.options);
+    return i18next.t(message.key, message.options) as unknown as string;
   }
 
   private getRequest(host: ArgumentsHost): any {
