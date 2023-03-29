@@ -30,7 +30,7 @@
     "test": "turbo run test"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.5.0",
+    "@commitlint/cli": "^17.5.1",
     "@commitlint/config-conventional": "^17.4.4",
     "@lerna-lite/cli": "^1.17.0",
     "@nestjs/common": "^9.3.12",
@@ -43,7 +43,7 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
-    "eslint": "^8.36.0",
+    "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
