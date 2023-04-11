@@ -30,9 +30,9 @@
     "i18next-fs-backend": "^2.1.1"
   },
   "devDependencies": {
-    "@nestjs/apollo": "^10.2.0",
+    "@nestjs/apollo": "^10.2.1",
     "@nestjs/common": "^9.4.0",
-    "@nestjs/graphql": "^10.2.0",
+    "@nestjs/graphql": "^10.2.1",
     "@nestjs/platform-express": "^9.4.0",
     "@types/i18next-fs-backend": "^1.1.2",
     "apollo-server-core": "^3.12.0",
