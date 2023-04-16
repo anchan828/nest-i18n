@@ -1,6 +1,6 @@
 {
   "name": "@anchan828/nest-i18n-i18next",
-  "version": "1.0.39",
+  "version": "1.0.40",
   "description": "",
   "homepage": "https://github.com/anchan828/nest-i18n#readme",
   "bugs": {
@@ -26,7 +26,7 @@
     "watch": "tsc --watch"
   },
   "dependencies": {
-    "@anchan828/nest-i18n-common": "^1.0.39",
+    "@anchan828/nest-i18n-common": "^1.0.40",
     "i18next-fs-backend": "^2.1.1"
   },
   "devDependencies": {
