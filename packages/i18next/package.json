@@ -31,9 +31,9 @@
   },
   "devDependencies": {
     "@apollo/server": "^4.7.1",
-    "@nestjs/apollo": "^11.0.5",
+    "@nestjs/apollo": "^11.0.6",
     "@nestjs/common": "^9.4.2",
-    "@nestjs/graphql": "^11.0.5",
+    "@nestjs/graphql": "^11.0.6",
     "@nestjs/platform-express": "^9.4.2",
     "@types/i18next-fs-backend": "^1.1.2",
     "graphql": "^16.6.0",
