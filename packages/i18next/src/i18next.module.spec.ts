@@ -73,7 +73,7 @@ describe.each([
           context: ({ req }: { req: Request }): { req: Request } => ({ req }),
           cors: { credentials: true, origin: true },
           fieldResolverEnhancers: ["guards", "interceptors", "filters"],
-          formatError: (error: any) => toApolloError(error, HttpStatus[error.extensions?.code]),
+          formatError: (error: any) => toApolloError(error, HttpStatus[error.extensions?.status]),
           typeDefs: `type Query {
             error: String
             test: String
