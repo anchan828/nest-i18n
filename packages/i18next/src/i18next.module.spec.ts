@@ -3,7 +3,7 @@ import { Controller, createParamDecorator, Get, HttpStatus, INestApplication, Us
 import { ExecutionContextHost } from "@nestjs/core/helpers/execution-context-host";
 import { GraphQLModule, ResolveField, Resolver } from "@nestjs/graphql";
 import { Test } from "@nestjs/testing";
-import { toApolloError } from "apollo-server-core";
+import { GraphQLError } from "graphql";
 import i18next from "i18next";
 import request from "supertest";
 import { I18nExceptionFilter } from "./exception.filter";
@@ -73,7 +73,10 @@ describe.each([
           context: ({ req }: { req: Request }): { req: Request } => ({ req }),
           cors: { credentials: true, origin: true },
           fieldResolverEnhancers: ["guards", "interceptors", "filters"],
-          formatError: (error: any) => toApolloError(error, HttpStatus[error.extensions?.status]),
+          formatError: (error: GraphQLError) => {
+            error.extensions.code = HttpStatus[error.extensions.status as number];
+            return error;
+          },
           typeDefs: `type Query {
             error: String
             test: String
