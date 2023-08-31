@@ -30,7 +30,7 @@
     "i18next-fs-backend": "^2.1.5"
   },
   "devDependencies": {
-    "@apollo/server": "^4.9.2",
+    "@apollo/server": "^4.9.3",
     "@nestjs/apollo": "^12.0.7",
     "@nestjs/common": "^10.2.3",
     "@nestjs/graphql": "^12.0.8",
