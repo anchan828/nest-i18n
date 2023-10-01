@@ -30,17 +30,17 @@
     "i18next-fs-backend": "^2.2.0"
   },
   "devDependencies": {
-    "@apollo/server": "^4.9.3",
-    "@nestjs/apollo": "^12.0.9",
-    "@nestjs/common": "^10.2.6",
-    "@nestjs/graphql": "^12.0.9",
-    "@nestjs/platform-express": "^10.2.6",
-    "@types/i18next-fs-backend": "^1.1.2",
-    "graphql": "^16.8.1",
-    "graphql-tools": "^9.0.0",
-    "i18next": "^23.5.1",
-    "rxjs": "^7.8.1",
-    "ts-morph": "^20.0.0"
+    "@apollo/server": "4.9.3",
+    "@nestjs/apollo": "12.0.9",
+    "@nestjs/common": "10.2.6",
+    "@nestjs/graphql": "12.0.9",
+    "@nestjs/platform-express": "10.2.6",
+    "@types/i18next-fs-backend": "1.1.2",
+    "graphql": "16.8.1",
+    "graphql-tools": "9.0.0",
+    "i18next": "23.5.1",
+    "rxjs": "7.8.1",
+    "ts-morph": "20.0.0"
   },
   "peerDependencies": {
     "@nestjs/common": "^8.0.0 || ^9.0.0 || ^10.0.0"
