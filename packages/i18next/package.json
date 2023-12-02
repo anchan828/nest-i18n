@@ -40,7 +40,7 @@
     "graphql-tools": "9.0.0",
     "i18next": "23.7.7",
     "rxjs": "7.8.1",
-    "ts-morph": "20.0.0"
+    "ts-morph": "21.0.1"
   },
   "peerDependencies": {
     "@nestjs/common": "^8.0.0 || ^9.0.0 || ^10.0.0"
